@@ -67,5 +67,4 @@ namespace CoolApp.Models
         public int ts { get; set; }
         public int precip { get; set; }
     }
-
 }

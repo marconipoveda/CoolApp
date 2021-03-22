@@ -1,13 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CoolApp" 
+             xmlns:converters="clr-namespace:CoolApp.Converters"
              x:Class="CoolApp.MainPage">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TextToImageConverter x:Key="converter"></converters:TextToImageConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <StackLayout>
         <SearchBar
             SearchCommand="{Binding SearchCommand}"
             x:Name="search"
-            SearchCommandParameter="{Binding Text, Source={x:Reference search}}">
-        </SearchBar>
+            SearchCommandParameter="{Binding Text, Source={x:Reference search}}" />
+        <Label Text="El clima para hoy es de: " />
+        <Label Text="{Binding Data.data[0].weather.description}" />
+        <Image Source="{Binding Data.data[0].weather.code, Converter={StaticResource converter}}"></Image>
     </StackLayout>
 </ContentPage>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,18 +12,35 @@ using Xamarin.Forms;
 
 namespace CoolApp.ViewModels
 {
-    public class MainPageViewModel
+    public class MainPageViewModel : INotifyPropertyChanged
     {
-        public WeatherData Data { get; set; }
+        private WeatherData _data;
+
+        public WeatherData Data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand SearchCommand { get; set; }
 
         public MainPageViewModel()
         {
-            SearchCommand = new Command(async (searchTerm)=>
+            SearchCommand = new Command(async (searchTerm) =>
                 {
-                    await GetData("https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=baac9df06c38429b89305960297a62ac&include=minutely");
+                    await GetData("https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=baac9df06c38429b89305960297a62ac");
                 });
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public async Task GetData(string url)
